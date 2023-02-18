@@ -29,9 +29,9 @@
   [seq count] ; count will be initialized as 0
   (cond
     (not (seqable? seq)) count ; if seq is not a sequence, return 0
-    (and (empty? (rest seq)) (not (seqable? (first seq)))) (inc count) ; if seq is the only element and not a sequence, return 1
-    (seqable? (first seq)) (count-seqs-recur (first seq) (inc count))
-    :else (count-seqs-recur (rest seq) count))) ; otherwise, look at the first element in the sequences
+    (and (empty? (rest seq)) (not (seqable? (first seq)))) (inc count) ; if there is only one element and it's not a sequence, return 1
+    (seqable? (first seq)) (count-seqs-recur (first seq) (inc count)) ; if the first element of the sequence is seqable, go into it
+    :else (count-seqs-recur (rest seq) count))) ; otherwise, move to the rest of the sequence
     ;;; TODO: how to do i move to the next element in seq?
 
 (defn count-seqs
