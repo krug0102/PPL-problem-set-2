@@ -24,15 +24,16 @@
 ;;; Problem 2 ;;;
 (def nested-vectors [[1] [2 [3]] [[[4 5] 6 [7 8]] [9 []] ]]) ; 10 nested sequences
 
+;;; I can't quite figure this one out.  I think I'm close.
+;;; TODO: how to do i move to the next element in seq?
 (defn count-seqs-recur
   "helper function which does the actual recursion, and keeps track of the count"
   [seq count] ; count will be initialized as 0
   (cond
-    (not (seqable? seq)) count ; if seq is not a sequence, return 0
-    (and (empty? (rest seq)) (not (seqable? (first seq)))) (inc count) ; if there is only one element and it's not a sequence, return 1
-    (seqable? (first seq)) (count-seqs-recur (first seq) (inc count)) ; if the first element of the sequence is seqable, go into it
+    (not (seqable? seq)) count ; if seq is not a sequence, return
+    (and (empty? (rest seq)) (not (seqable? (first seq)))) (inc count) ; if seq is a sequence with only one element, return count + 1
+    (seqable? (first seq)) (count-seqs-recur (first seq) (inc count)) ; if the first element of the sequence is seqable, go into it, increase count by 1
     :else (count-seqs-recur (rest seq) count))) ; otherwise, move to the rest of the sequence
-    ;;; TODO: how to do i move to the next element in seq?
 
 (defn count-seqs
   "takes a sequence that has nested sequences in it, returns the total number of nested sequences,
@@ -57,7 +58,7 @@
 (defn sort-strings
   "takes a sequence of strings and sorts them by length"
   [seq]
-  (sort compare-lengths seq))
+  (sort (fn [a b] (< (count a) (count b))) seq))
 
 ;; 2. Sort a sequence of hashmaps that have the keys :name, :age, :hometown by the :age field ;;
 (defn compare-hashmaps
@@ -74,7 +75,7 @@
 (defn sort-ages
   "takes a sequence of hashmaps with keys :name, :age, :hometown and sorts them by :age field"
   [seq]
-  (sort compare-hashmaps seq))
+  (sort (fn [a b] (< (:age a) (:age b))) seq))
 
 ;; 3. Sort a sequence of BigIntegers by their values
 (defn compare-BigIntegers
@@ -91,7 +92,7 @@
 (defn sort-BigIntegers
   "takes a sequence of BigIntegers and sorts them by their values"
   [seq]
-  (sort compare-BigIntegers seq))
+  (sort (fn [a b] (< (.intValue a) (.intValue b))) seq))
 
 
 ;;; Problem 4 ;;;
